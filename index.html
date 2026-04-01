@@ -14,229 +14,135 @@
             font-family: 'Playfair Display', serif; overflow: hidden;
         }
 
+        /* Start Screen */
         #overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: black; z-index: 100; display: flex; 
+            background: #000; z-index: 1000; display: flex; 
             justify-content: center; align-items: center; flex-direction: column;
+            transition: 1s;
         }
 
-        .q-word {
+        .q-logo {
             font-family: 'Dancing Script', cursive;
-            font-size: 5rem;
-            color: #ff4d6d;
-            text-shadow: 0 0 20px #ff4d6d, 0 0 40px #ff758f;
-            display: block;
-            margin-bottom: 10px;
+            font-size: 8rem; color: #ff4d6d;
+            text-shadow: 0 0 30px #ff4d6d;
             animation: pulse 2s infinite;
         }
 
-        @keyframes pulse {
-            0% { transform: scale(1); opacity: 0.8; }
-            50% { transform: scale(1.1); opacity: 1; }
-            100% { transform: scale(1); opacity: 0.8; }
+        /* Slides Container */
+        .slider {
+            width: 100%; height: 100%;
+            display: none; position: relative;
         }
 
-        .content-box {
-            position: absolute; top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center; width: 85%;
-            display: none; z-index: 10;
+        .slide {
+            position: absolute; width: 100%; height: 100%;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            text-align: center;
+            transform: translateX(100%);
+            transition: transform 1.5s ease-in-out;
         }
 
-        h1 { font-size: 3rem; margin: 10px 0; color: #fff; }
-        p { font-size: 1.4rem; color: #ffb1c1; font-style: italic; }
+        .slide.active { transform: translateX(0); }
+        .slide.exit { transform: translateX(-100%); }
+
+        .slide h1 { font-size: 3.5rem; margin: 10px 0; text-shadow: 0 0 15px rgba(255,255,255,0.5); }
+        .slide p { font-size: 1.5rem; color: #ffb1c1; max-width: 80%; }
 
         .btn-start {
             padding: 15px 50px; font-size: 1.2rem; border-radius: 50px; border: 2px solid #ff4d6d;
             background: transparent; color: #ff4d6d; font-weight: bold; cursor: pointer;
-            transition: 0.5s;
+            margin-top: 20px; transition: 0.5s;
         }
-        .btn-start:hover { background: #ff4d6d; color: white; box-shadow: 0 0 20px #ff4d6d; }
+        .btn-start:hover { background: #ff4d6d; color: white; box-shadow: 0 0 30px #ff4d6d; }
 
-        /* Floating Elements */
-        .heart { position: absolute; color: rgba(255, 77, 109, 0.5); pointer-events: none; animation: fly 10s linear infinite; }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.1); opacity: 1; }
+        }
+
+        /* Hearts Background */
+        .heart { position: absolute; color: rgba(255, 77, 109, 0.4); pointer-events: none; animation: fly 10s linear infinite; z-index: 1; }
         @keyframes fly {
-            from { transform: translateY(100vh) rotate(0deg); opacity: 1; }
-            to { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+            from { transform: translateY(110vh) rotate(0deg); }
+            to { transform: translateY(-10vh) rotate(360deg); }
         }
     </style>
 </head>
 <body>
 
     <div id="overlay">
-        <span class="q-word">Q</span>
-        <button class="btn-start" onclick="startSurprise()">Tap to Enter Her World</button>
+        <div class="q-logo">Q</div>
+        <button class="btn-start" onclick="startSurprise()">Open Your Gift 🎁</button>
     </div>
 
     <audio id="bgMusic" loop>
         <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mpeg">
     </audio>
 
-    <div class="content-box" id="mainBox">
-        <div id="story">
-            </div>
+    <div class="slider" id="mainSlider">
+        <div class="slide active">
+            <div class="q-logo" style="font-size: 4rem;">Q</div>
+            <h1 class="animate__animated animate__backInDown">Happy Birthday!</h1>
+            <p>To the girl who rules my heart and world. ✨</p>
+        </div>
+
+        <div class="slide">
+            <div class="q-logo" style="font-size: 4rem;">Q</div>
+            <h1>I Love You</h1>
+            <p>More than words can express, today and forever. ❤️</p>
+        </div>
+
+        <div class="slide">
+            <div class="q-logo" style="font-size: 4rem;">Q</div>
+            <h1>My Everything</h1>
+            <p>May your day be filled with as much joy as you give me. 💍</p>
+        </div>
     </div>
 
     <script>
-        const messages = [
-            { q: "Q", h1: "Happy Birthday!", p: "The Queen of my heart deserves the world today. ✨" },
-            { q: "Q", h1: "I Love You", p: "More than words can ever express. Forever yours. ❤️" },
-            { q: "Q", h1: "Stay Blessed", p: "May your life be as beautiful as your soul. 👑" }
-        ];
-
-        let index = 0;
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
 
         function startSurprise() {
-            document.getElementById('overlay').classList.add('animate__animated', 'animate__fadeOut');
+            document.getElementById('overlay').style.opacity = '0';
             setTimeout(() => {
                 document.getElementById('overlay').style.display = 'none';
-                document.getElementById('mainBox').style.display = 'block';
+                document.getElementById('mainSlider').style.display = 'block';
                 document.getElementById('bgMusic').play();
-                showNext();
+                
+                // Start Slide Rotation
+                setInterval(nextSlide, 15000); // 15 Seconds Change
             }, 1000);
         }
 
-        function showNext() {
-            const story = document.getElementById('story');
-            const data = messages[index];
-            
-            story.innerHTML = `
-                <div class="animate__animated animate__fadeIn">
-                    <span class="q-word">${data.q}</span>
-                    <h1>${data.h1}</h1>
-                    <p>${data.p}</p>
-                </div>
-            `;
+        function nextSlide() {
+            slides[currentSlide].classList.remove('active');
+            slides[currentSlide].classList.add('exit');
 
-            index = (index + 1) % messages.length;
-            // 15 seconds delay for each slide
-            setTimeout(showNext, 15000); 
+            currentSlide = (currentSlide + 1) % slides.length;
+
+            slides[currentSlide].classList.remove('exit');
+            slides[currentSlide].classList.add('active');
+            
+            // Clean up exit class after transition
+            setTimeout(() => {
+                document.querySelectorAll('.slide:not(.active)').forEach(s => s.classList.remove('exit'));
+            }, 1500);
         }
 
-        // Hearts Generator
+        // Heart Generator
         setInterval(() => {
             const heart = document.createElement('div');
             heart.classList.add('heart');
             heart.innerHTML = '❤️';
             heart.style.left = Math.random() * 100 + 'vw';
-            heart.style.fontSize = Math.random() * 20 + 10 + 'px';
-            heart.style.animationDuration = Math.random() * 5 + 5 + 's';
+            heart.style.fontSize = Math.random() * 25 + 10 + 'px';
+            heart.style.animationDuration = Math.random() * 5 + 7 + 's';
             document.body.appendChild(heart);
             setTimeout(() => heart.remove(), 10000);
-        }, 500);
-    </script>
-</body>
-</html>            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
-            display: none; /* Initially Hidden */
-        }
-
-        h1 { font-family: 'Dancing Script', cursive; font-size: 3.5rem; color: #ff4d6d; text-shadow: 2px 2px 10px rgba(255,77,109,0.5); }
-        .sub-text { font-size: 1.1rem; letter-spacing: 1px; margin-bottom: 20px; color: #ffb1c1; }
-
-        /* Modern Countdown */
-        #countdown {
-            display: flex; justify-content: center; gap: 15px; margin: 20px 0;
-        }
-        .time-box { background: rgba(255,77,109,0.2); padding: 10px; border-radius: 10px; min-width: 60px; }
-        .time-box span { display: block; font-size: 1.5rem; font-weight: bold; }
-
-        /* Flying Particles */
-        .particle { position: absolute; pointer-events: none; animation: animate 5s linear forwards; }
-        @keyframes animate {
-            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
-        }
-
-        .btn-start {
-            padding: 15px 40px; font-size: 1.2rem; border-radius: 50px; border: none;
-            background: white; color: #ff4d6d; font-weight: bold; cursor: pointer;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2); transition: 0.3s;
-        }
-    </style>
-</head>
-<body>
-
-    <div id="overlay">
-        <h1 style="color: white; margin-bottom: 30px;">A Gift for You... 🎁</h1>
-        <button class="btn-start" onclick="startSurprise()">Open Surprise</button>
-    </div>
-
-    <audio id="bgMusic" loop>
-        <source src="https://www.bensound.com/bensound-music/bensound-romantic.mp3" type="audio/mpeg">
-    </audio>
-
-    <div class="bg-layer"></div>
-
-    <div class="content-box animate__animated" id="mainBox">
-        <div id="storyContent">
-            </div>
-
-        <div id="countdown">
-            <div class="time-box"><span id="days">00</span>Days</div>
-            <div class="time-box"><span id="hours">00</span>Hrs</div>
-            <div class="time-box"><span id="mins">00</span>Mins</div>
-            <div class="time-box"><span id="secs">00</span>Secs</div>
-        </div>
-    </div>
-
-    <script>
-        const messages = [
-            { h1: "Happy Birthday!", p: "To the most beautiful girl in the world! ✨" },
-            { h1: "Counting Every Second...", p: "Since you came into my life and made it bright! ❤️" },
-            { h1: "You are Special", p: "May this day be as wonderful as your smile. 💍" },
-            { h1: "I Love You", p: "Forever and Always... Yours. 🌹" }
-        ];
-
-        let msgIndex = 0;
-
-        function startSurprise() {
-            document.getElementById('overlay').style.opacity = '0';
-            setTimeout(() => { 
-                document.getElementById('overlay').style.display = 'none';
-                document.getElementById('mainBox').style.display = 'block';
-                document.getElementById('mainBox').classList.add('animate__zoomIn');
-                document.getElementById('bgMusic').play();
-                updateStory();
-            }, 1000);
-        }
-
-        function updateStory() {
-            const content = document.getElementById('storyContent');
-            content.innerHTML = `
-                <h1 class="animate__animated animate__fadeInDown">${messages[msgIndex].h1}</h1>
-                <p class="sub-text animate__animated animate__fadeInUp">${messages[msgIndex].p}</p>
-            `;
-            
-            msgIndex = (msgIndex + 1) % messages.length;
-            setTimeout(updateStory, 4000); // Change story every 4 seconds automatically
-        }
-
-        // Particle Effect (Hearts/Flowers)
-        function createParticle() {
-            const p = document.createElement('div');
-            p.classList.add('particle');
-            p.innerHTML = ['❤️', '🌸', '✨', '🎈'][Math.floor(Math.random() * 4)];
-            p.style.left = Math.random() * 100 + 'vw';
-            p.style.top = '100vh';
-            p.style.fontSize = Math.random() * 20 + 10 + 'px';
-            p.style.duration = Math.random() * 3 + 2 + 's';
-            document.body.appendChild(p);
-            setTimeout(() => p.remove(), 5000);
-        }
-        setInterval(createParticle, 200);
-
-        // Simple Countdown Logic (Kal ka din)
-        function updateCountdown() {
-            const target = new Date("April 2, 2026 00:00:00").getTime();
-            const now = new Date().getTime();
-            const diff = target - now;
-
-            document.getElementById('days').innerText = Math.floor(diff / (1000 * 60 * 60 * 24));
-            document.getElementById('hours').innerText = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            document.getElementById('mins').innerText = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            document.getElementById('secs').innerText = Math.floor((diff % (1000 * 60)) / 1000);
-        }
-        setInterval(updateCountdown, 1000);
+        }, 400);
     </script>
 </body>
 </html>
