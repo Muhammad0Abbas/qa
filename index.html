@@ -3,123 +3,148 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Birthday Love!</title>
+    <title>For My Special One ❤️</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background: #fff0f3;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow-x: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            color: #ff4d6d;
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;600&display=swap');
+
+        body, html {
+            margin: 0; padding: 0; height: 100%; width: 100%;
+            background: #0a0a0a; color: white;
+            font-family: 'Poppins', sans-serif; overflow: hidden;
         }
 
-        .container {
-            text-align: center;
-            padding: 20px;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(255, 77, 109, 0.2);
-            max-width: 90%;
-            z-index: 10;
+        /* Overlay for Initial Click */
+        #overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle, #ff4d6d, #800f2f);
+            z-index: 100; display: flex; justify-content: center; align-items: center;
+            flex-direction: column; transition: 1s;
         }
 
-        h1 { font-size: 2.5rem; margin-bottom: 10px; }
-        p { font-size: 1.2rem; line-height: 1.6; }
-
-        .slide { display: none; animation: fadeIn 1.5s; }
-        .active { display: block; }
-
-        .btn {
-            background: #ff4d6d;
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 50px;
-            font-size: 18px;
-            cursor: pointer;
-            margin-top: 20px;
-            transition: 0.3s;
+        /* Video/Background Layer */
+        .bg-layer {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(45deg, #1a1a1a, #2d0011);
+            z-index: -1;
         }
 
-        .btn:hover { background: #ff758f; transform: scale(1.05); }
-
-        /* Floating Hearts Animation */
-        .heart {
-            position: fixed;
-            top: -10vh;
-            font-size: 20px;
-            user-select: none;
-            z-index: 1;
-            animation: fall linear forwards;
+        .content-box {
+            position: relative; text-align: center; width: 85%; max-width: 500px;
+            padding: 40px; border-radius: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            display: none; /* Initially Hidden */
         }
 
-        @keyframes fall {
-            to { transform: translateY(110vh) translateX(20px); opacity: 0; }
+        h1 { font-family: 'Dancing Script', cursive; font-size: 3.5rem; color: #ff4d6d; text-shadow: 2px 2px 10px rgba(255,77,109,0.5); }
+        .sub-text { font-size: 1.1rem; letter-spacing: 1px; margin-bottom: 20px; color: #ffb1c1; }
+
+        /* Modern Countdown */
+        #countdown {
+            display: flex; justify-content: center; gap: 15px; margin: 20px 0;
+        }
+        .time-box { background: rgba(255,77,109,0.2); padding: 10px; border-radius: 10px; min-width: 60px; }
+        .time-box span { display: block; font-size: 1.5rem; font-weight: bold; }
+
+        /* Flying Particles */
+        .particle { position: absolute; pointer-events: none; animation: animate 5s linear forwards; }
+        @keyframes animate {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        .btn-start {
+            padding: 15px 40px; font-size: 1.2rem; border-radius: 50px; border: none;
+            background: white; color: #ff4d6d; font-weight: bold; cursor: pointer;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2); transition: 0.3s;
         }
     </style>
 </head>
 <body>
 
+    <div id="overlay">
+        <h1 style="color: white; margin-bottom: 30px;">A Gift for You... 🎁</h1>
+        <button class="btn-start" onclick="startSurprise()">Open Surprise</button>
+    </div>
+
     <audio id="bgMusic" loop>
-        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+        <source src="https://www.bensound.com/bensound-music/bensound-romantic.mp3" type="audio/mpeg">
     </audio>
 
-    <div class="container animate__animated animate__zoomIn">
-        <div class="slide active" id="slide1">
-            <h1>Hey Beautiful! ✨</h1>
-            <p>I have a small surprise for you...</p>
-            <button class="btn" onclick="nextSlide(2)">Click to Start</button>
-        </div>
+    <div class="bg-layer"></div>
 
-        <div class="slide" id="slide2">
-            <h1>Happy Birthday! 🎂</h1>
-            <p>Aap mere liye duniya ki sab se pyari insaan ho.</p>
-            <div style="font-size: 50px;">🎁🌹</div>
-            <button class="btn" onclick="nextSlide(3)">One More Thing...</button>
-        </div>
+    <div class="content-box animate__animated" id="mainBox">
+        <div id="storyContent">
+            </div>
 
-        <div class="slide" id="slide3">
-            <h1>I Love You ❤️</h1>
-            <p>May this year bring you endless happiness and smiles!</p>
-            <div style="font-size: 50px;">💍✨</div>
-            <p><i>Your Favorite Person</i></p>
+        <div id="countdown">
+            <div class="time-box"><span id="days">00</span>Days</div>
+            <div class="time-box"><span id="hours">00</span>Hrs</div>
+            <div class="time-box"><span id="mins">00</span>Mins</div>
+            <div class="time-box"><span id="secs">00</span>Secs</div>
         </div>
     </div>
 
     <script>
-        // Slide Change Function
-        function nextSlide(n) {
-            // Music Play on First Click
-            var music = document.getElementById("bgMusic");
-            music.play();
+        const messages = [
+            { h1: "Happy Birthday!", p: "To the most beautiful girl in the world! ✨" },
+            { h1: "Counting Every Second...", p: "Since you came into my life and made it bright! ❤️" },
+            { h1: "You are Special", p: "May this day be as wonderful as your smile. 💍" },
+            { h1: "I Love You", p: "Forever and Always... Yours. 🌹" }
+        ];
 
-            document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
-            document.getElementById('slide' + n).classList.add('active');
+        let msgIndex = 0;
+
+        function startSurprise() {
+            document.getElementById('overlay').style.opacity = '0';
+            setTimeout(() => { 
+                document.getElementById('overlay').style.display = 'none';
+                document.getElementById('mainBox').style.display = 'block';
+                document.getElementById('mainBox').classList.add('animate__zoomIn');
+                document.getElementById('bgMusic').play();
+                updateStory();
+            }, 1000);
         }
 
-        // Floating Hearts Logic
-        function createHeart() {
-            const heart = document.createElement('div');
-            heart.classList.add('heart');
-            heart.innerHTML = '❤️';
-            heart.style.left = Math.random() * 100 + 'vw';
-            heart.style.animationDuration = Math.random() * 3 + 2 + 's';
-            heart.style.opacity = Math.random();
-            document.body.appendChild(heart);
-            setTimeout(() => { heart.remove(); }, 5000);
+        function updateStory() {
+            const content = document.getElementById('storyContent');
+            content.innerHTML = `
+                <h1 class="animate__animated animate__fadeInDown">${messages[msgIndex].h1}</h1>
+                <p class="sub-text animate__animated animate__fadeInUp">${messages[msgIndex].p}</p>
+            `;
+            
+            msgIndex = (msgIndex + 1) % messages.length;
+            setTimeout(updateStory, 4000); // Change story every 4 seconds automatically
         }
-        setInterval(createHeart, 300)
+
+        // Particle Effect (Hearts/Flowers)
+        function createParticle() {
+            const p = document.createElement('div');
+            p.classList.add('particle');
+            p.innerHTML = ['❤️', '🌸', '✨', '🎈'][Math.floor(Math.random() * 4)];
+            p.style.left = Math.random() * 100 + 'vw';
+            p.style.top = '100vh';
+            p.style.fontSize = Math.random() * 20 + 10 + 'px';
+            p.style.duration = Math.random() * 3 + 2 + 's';
+            document.body.appendChild(p);
+            setTimeout(() => p.remove(), 5000);
+        }
+        setInterval(createParticle, 200);
+
+        // Simple Countdown Logic (Kal ka din)
+        function updateCountdown() {
+            const target = new Date("April 2, 2026 00:00:00").getTime();
+            const now = new Date().getTime();
+            const diff = target - now;
+
+            document.getElementById('days').innerText = Math.floor(diff / (1000 * 60 * 60 * 24));
+            document.getElementById('hours').innerText = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            document.getElementById('mins').innerText = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            document.getElementById('secs').innerText = Math.floor((diff % (1000 * 60)) / 1000);
+        }
+        setInterval(updateCountdown, 1000);
     </script>
 </body>
 </html>
