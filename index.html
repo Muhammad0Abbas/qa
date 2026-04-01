@@ -1,19 +1,125 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Happy Birthday!</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Love!</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <style>
-        body { text-align: center; font-family: 'Arial', sans-serif; background-color: #ffe6e6; color: #ff4d4d; padding: 50px; }
-        h1 { font-size: 50px; }
-        .message { font-size: 24px; margin-top: 20px; }
-        .cake { font-size: 100px; margin: 20px; }
-        button { background-color: #ff4d4d; color: white; border: none; padding: 15px 30px; font-size: 18px; border-radius: 20px; cursor: pointer; }
+        body {
+            margin: 0;
+            padding: 0;
+            background: #fff0f3;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #ff4d6d;
+        }
+
+        .container {
+            text-align: center;
+            padding: 20px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(255, 77, 109, 0.2);
+            max-width: 90%;
+            z-index: 10;
+        }
+
+        h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        p { font-size: 1.2rem; line-height: 1.6; }
+
+        .slide { display: none; animation: fadeIn 1.5s; }
+        .active { display: block; }
+
+        .btn {
+            background: #ff4d6d;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-size: 18px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: 0.3s;
+        }
+
+        .btn:hover { background: #ff758f; transform: scale(1.05); }
+
+        /* Floating Hearts Animation */
+        .heart {
+            position: fixed;
+            top: -10vh;
+            font-size: 20px;
+            user-select: none;
+            z-index: 1;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            to { transform: translateY(110vh) translateX(20px); opacity: 0; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
 <body>
-    <h1>Happy Birthday! 🎂</h1>
-    <div class="cake">🎁</div>
-    <p class="message">Aap mere liye bohat special ho! ❤️</p>
-    <button onclick="alert('I Love You! Have a great day!')">Click for a Surprise!</button>
+
+    <audio id="bgMusic" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="container animate__animated animate__zoomIn">
+        <div class="slide active" id="slide1">
+            <h1>Hey Beautiful! ✨</h1>
+            <p>I have a small surprise for you...</p>
+            <button class="btn" onclick="nextSlide(2)">Click to Start</button>
+        </div>
+
+        <div class="slide" id="slide2">
+            <h1>Happy Birthday! 🎂</h1>
+            <p>Aap mere liye duniya ki sab se pyari insaan ho.</p>
+            <div style="font-size: 50px;">🎁🌹</div>
+            <button class="btn" onclick="nextSlide(3)">One More Thing...</button>
+        </div>
+
+        <div class="slide" id="slide3">
+            <h1>I Love You ❤️</h1>
+            <p>May this year bring you endless happiness and smiles!</p>
+            <div style="font-size: 50px;">💍✨</div>
+            <p><i>Your Favorite Person</i></p>
+        </div>
+    </div>
+
+    <script>
+        // Slide Change Function
+        function nextSlide(n) {
+            // Music Play on First Click
+            var music = document.getElementById("bgMusic");
+            music.play();
+
+            document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+            document.getElementById('slide' + n).classList.add('active');
+        }
+
+        // Floating Hearts Logic
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = Math.random() * 3 + 2 + 's';
+            heart.style.opacity = Math.random();
+            document.body.appendChild(heart);
+            setTimeout(() => { heart.remove(); }, 5000);
+        }
+        setInterval(createHeart, 300)
+    </script>
 </body>
 </html>
