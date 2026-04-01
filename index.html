@@ -3,38 +3,130 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>For My Special One ❤️</title>
+    <title>For My Queen 👑</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:ital,wght@1,600&display=swap');
 
         body, html {
             margin: 0; padding: 0; height: 100%; width: 100%;
-            background: #0a0a0a; color: white;
-            font-family: 'Poppins', sans-serif; overflow: hidden;
+            background: #050505; color: white;
+            font-family: 'Playfair Display', serif; overflow: hidden;
         }
 
-        /* Overlay for Initial Click */
         #overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle, #ff4d6d, #800f2f);
-            z-index: 100; display: flex; justify-content: center; align-items: center;
-            flex-direction: column; transition: 1s;
+            background: black; z-index: 100; display: flex; 
+            justify-content: center; align-items: center; flex-direction: column;
         }
 
-        /* Video/Background Layer */
-        .bg-layer {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(45deg, #1a1a1a, #2d0011);
-            z-index: -1;
+        .q-word {
+            font-family: 'Dancing Script', cursive;
+            font-size: 5rem;
+            color: #ff4d6d;
+            text-shadow: 0 0 20px #ff4d6d, 0 0 40px #ff758f;
+            display: block;
+            margin-bottom: 10px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.8; }
         }
 
         .content-box {
-            position: relative; text-align: center; width: 85%; max-width: 500px;
-            padding: 40px; border-radius: 30px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center; width: 85%;
+            display: none; z-index: 10;
+        }
+
+        h1 { font-size: 3rem; margin: 10px 0; color: #fff; }
+        p { font-size: 1.4rem; color: #ffb1c1; font-style: italic; }
+
+        .btn-start {
+            padding: 15px 50px; font-size: 1.2rem; border-radius: 50px; border: 2px solid #ff4d6d;
+            background: transparent; color: #ff4d6d; font-weight: bold; cursor: pointer;
+            transition: 0.5s;
+        }
+        .btn-start:hover { background: #ff4d6d; color: white; box-shadow: 0 0 20px #ff4d6d; }
+
+        /* Floating Elements */
+        .heart { position: absolute; color: rgba(255, 77, 109, 0.5); pointer-events: none; animation: fly 10s linear infinite; }
+        @keyframes fly {
+            from { transform: translateY(100vh) rotate(0deg); opacity: 1; }
+            to { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="overlay">
+        <span class="q-word">Q</span>
+        <button class="btn-start" onclick="startSurprise()">Tap to Enter Her World</button>
+    </div>
+
+    <audio id="bgMusic" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="content-box" id="mainBox">
+        <div id="story">
+            </div>
+    </div>
+
+    <script>
+        const messages = [
+            { q: "Q", h1: "Happy Birthday!", p: "The Queen of my heart deserves the world today. ✨" },
+            { q: "Q", h1: "I Love You", p: "More than words can ever express. Forever yours. ❤️" },
+            { q: "Q", h1: "Stay Blessed", p: "May your life be as beautiful as your soul. 👑" }
+        ];
+
+        let index = 0;
+
+        function startSurprise() {
+            document.getElementById('overlay').classList.add('animate__animated', 'animate__fadeOut');
+            setTimeout(() => {
+                document.getElementById('overlay').style.display = 'none';
+                document.getElementById('mainBox').style.display = 'block';
+                document.getElementById('bgMusic').play();
+                showNext();
+            }, 1000);
+        }
+
+        function showNext() {
+            const story = document.getElementById('story');
+            const data = messages[index];
+            
+            story.innerHTML = `
+                <div class="animate__animated animate__fadeIn">
+                    <span class="q-word">${data.q}</span>
+                    <h1>${data.h1}</h1>
+                    <p>${data.p}</p>
+                </div>
+            `;
+
+            index = (index + 1) % messages.length;
+            // 15 seconds delay for each slide
+            setTimeout(showNext, 15000); 
+        }
+
+        // Hearts Generator
+        setInterval(() => {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.fontSize = Math.random() * 20 + 10 + 'px';
+            heart.style.animationDuration = Math.random() * 5 + 5 + 's';
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 10000);
+        }, 500);
+    </script>
+</body>
+</html>            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
             display: none; /* Initially Hidden */
         }
 
